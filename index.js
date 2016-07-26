@@ -50,6 +50,10 @@ module.exports = class Git {
             '--work-tree=' + repo
         ]
     }
+
+    init() {
+        return gitExec(this.gitCommands.concat(['init','-q']));
+    }
     
     /**
      * 列出提交里所修改的文件
