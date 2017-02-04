@@ -68,4 +68,21 @@ module.exports = class Git {
         ])).then(str => _unique(str.split(/\s+/)))
     }
 
+    status() {
+        return gitExec(this.gitCommands.concat('status', '-s'))
+            .then(lines => {
+                var modifieds = [], untrackeds = [];
+                lines.split(/[\r\n]+/).forEach(line => {
+                    var [type, file] = line.trim().split(/\s+/);
+                    switch (type) {
+                        case 'M':
+                            modifieds.push(file);
+                            break;
+                        case '??':
+                            untrackeds.push(file);
+                    }
+                });
+                return {modifieds, untrackeds}
+            })
+    }
 }
